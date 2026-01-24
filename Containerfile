@@ -37,6 +37,9 @@ RUN ARCH=$(dpkg --print-architecture) && \
     ./multiprotocol-packages/debian-bookworm/deb/cpcd_*_${ARCH}.deb \
     ./multiprotocol-packages/debian-bookworm/deb/ot-br-posix_*_${ARCH}.deb
 
+# CPCd configuration
+COPY ./cpcd.conf /etc/cpcd.conf
+
 # Start from root homedir
 WORKDIR /root
 
