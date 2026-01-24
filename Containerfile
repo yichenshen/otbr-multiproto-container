@@ -43,6 +43,8 @@ COPY ./cpcd.conf /etc/cpcd.conf
 # Start from root homedir
 WORKDIR /root
 
+COPY --chmod=744 ./start.sh /root/start.sh
+
 # Cleanup
 RUN apt-get remove -y \
     lsb-release \
@@ -53,4 +55,4 @@ RUN apt-get autoremove -y
 RUN rm -rf /var/lib/apt/lists/*
 RUN rm -rf /tmp/silabs
 
-CMD ["/bin/bash"]
+CMD ["/root/start.sh"]
