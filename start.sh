@@ -2,6 +2,7 @@
 
 cd ~ || exit
 cpcd &> cpcd.log &
+mdnsd -i enp3s0 > mdnsd.log &
 
 sleep 2
 

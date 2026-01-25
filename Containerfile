@@ -20,6 +20,9 @@ RUN apt-get install -y \
     unzip \
     make
 
+# Runtime dependency
+RUN apt-get install -y mdnsd
+
 # Download Silabs packages
 WORKDIR /tmp/silabs
 RUN wget https://github.com/SiliconLabs/simplicity_sdk/releases/latest/download/debian-bookworm.zip
