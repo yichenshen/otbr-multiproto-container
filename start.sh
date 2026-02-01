@@ -1,5 +1,9 @@
 #! /bin/bash
 
 cd ~ || exit
-mdnsd -i enp3s0
-otbr-agent -d 6 -v -I wpan0 -B enp3s0 'spinel+cpc://cpcd_0?iid=2&iid-list=0'
+echo "Infra Interface: $OT_INFRA_IF"
+echo "Thread Interface: $OT_THREAD_IF"
+echo "Radio URL: $OT_RCP_DEVICE"
+echo "Log Level: $OT_LOG_LEVEL"
+mdnsd -i "$OT_INFRA_IF"
+otbr-agent -d "$OT_LOG_LEVEL" -v -I "$OT_THREAD_IF" -B "$OT_INFRA_IF" "$OT_RCP_DEVICE"

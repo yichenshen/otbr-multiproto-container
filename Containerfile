@@ -2,8 +2,14 @@
 FROM debian:bookworm-slim
 
 # Setup installation and DOCKER env
-ENV DEBIAN_FRONTEND=noninteractive
+ARG DEBIAN_FRONTEND=noninteractive
 ENV DOCKER=1
+
+# otbr options
+ENV OT_INFRA_IF=eth0
+ENV OT_THREAD_IF=wpan0
+ENV OT_RCP_DEVICE='spinel+cpc://cpcd_0?iid=2&iid-list=0'
+ENV OT_LOG_LEVEL=3
 
 # Silabs dhcp backports
 # https://docs.silabs.com/openthread/latest/multiprotocol-solution-linux/running-multiprotocol-with-packages
