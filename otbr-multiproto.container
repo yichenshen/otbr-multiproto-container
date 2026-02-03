@@ -1,0 +1,33 @@
+[Unit]
+Description=Silabs OTBR Container, for border router running on Silabs multiprotocol.
+
+[Container]
+Image=ghcr.io/yichenshen/otbr-multiproto-container:latest
+AutoUpdate=registry
+
+Network=host
+
+AddDevice=/dev/net/tun
+
+Volume=/run/dbus:/run/dbus:rw
+Volume=/dev/shm:/dev/shm:rw
+Volume=otbr-data:/var/lib/thread:rw
+Volume=otbr-run:/run:rw
+Volume=/etc/localtime:/etc/localtime:ro
+
+PodmanArgs=--privileged
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=180
+RestartSec=30
+
+ExecStartPost=/usr/bin/sleep 20
+ExecStartPost=/usr/bin/ip -6 route del fdae:3c84:2ad6:1::/64 dev wpan0
+ExecStartPost=/usr/bin/ip -6 route replace fdae:3c84:2ad6:1::/64 dev wpan0 metric 64
+ExecStartPost=/usr/bin/ip -6 route del fe80::/64 dev wpan0
+ExecStartPost=/usr/bin/ip -6 route replace fe80::/64 dev wpan0 metric 2048
+
+
+[Install]
+WantedBy=default.target
