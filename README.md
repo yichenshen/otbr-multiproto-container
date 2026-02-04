@@ -63,7 +63,13 @@ sudo ip -6 route del fe80::/64 dev wpan0
 sudo ip -6 route replace fe80::/64 dev wpan0 metric 2048
 ```
 
-The quadlet container will do this after start automatically.
+The quadlet container will do this after start automatically, though you'll need to change your Off-Mesh-Routable address (`fdae:3c84:2ad6:1`) to your own.
+
+### OMR
+
+OMR address, Off-Mesh-Routable address, is the address the you use to route from outside the thread network to nodes inside. Each border router has their local OMR. With multi routers, the Thread leader will pick a OMR prefix to use for the whole network. This means that if the border router that owns the OMR goes offline, the prefix of all the nodes could switch to the secondary OMR prefix. That'll mess up your firewall settings.
+
+One easy way to avoid this is to configure your border routers to have the same OMR with `ot-ctl`.
 
 ### Firewall
 
