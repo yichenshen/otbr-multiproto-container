@@ -87,6 +87,24 @@ You probably also want to allowlist mdns multicast:
 sudo firewall-cmd --zone=<zone> --add-rich-rule='rule family="ipv6" destination address="ff02::/16" accept'
 ```
 
+Lastly, if your infra interface (e.g. eth0 or wlan0) is not in the same zone as your thread interface (e.g. wlan0), then you'll want to allow forwarding between the zones.
+
+Say is eth0 is on zone `home` and otbr's wpan0 is on zone `thread`.
+
+```
+sudo firewall-cmd --permanent --new-policy=server-to-wpan
+sudo firewall-cmd --permanent --policy=server-to-wpan --set-target=ACCEPT
+sudo firewall-cmd --permanent --policy=server-to-wpan --add-ingress-zone=home
+sudo firewall-cmd --permanent --policy=server-to-wpan --add-egress-zone=thread
+
+sudo firewall-cmd --permanent --new-policy=wpan-to-server
+sudo firewall-cmd --permanent --policy=wpan-to-server --set-target=ACCEPT
+sudo firewall-cmd --permanent --policy=wpan-to-server --add-ingress-zone=thread
+sudo firewall-cmd --permanent --policy=wpan-to-server --add-egress-zone=home
+
+sudo firewall-cmd --reload
+```
+
 ## Web GUI and ot-ctl
 
 Both the web GUI anf `ot-cli` are installed on the same container, but they're not running by default. The quadlet provided stores the otbr socket on a named volume, which we can then mount onto another container to run these tools.
