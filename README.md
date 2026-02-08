@@ -23,6 +23,21 @@ The same environment vars used for the [upstream](https://openthread.io/guides/b
 
 You'll need to configure IP forwarding and RA. Refer to the [OpenThread guide](https://openthread.io/guides/border-router/build-docker#enable-ip-forwarding). The script may need to be modified if your backbone interface isn't wlan0.
 
+#### Network Manager
+
+If interfaces are managed by network manager, the interface specific RA setting might not be applied at boot with sysctl. Instead add a dispatcher to Network Manager:
+
+`/etc/NetworkManager/dispatcher.d/99-accept-ra`
+
+```bash
+#!/bin/bash
+
+if [ "$1" = "eth0" ] && [ "$2" = "up" ]; then
+    echo 2 > /proc/sys/net/ipv6/conf/eth0/accept_ra
+    echo 64 > /proc/sys/net/ipv6/conf/eth0/accept_ra_rt_info_max_plen
+fi
+```
+
 ## Running
 
 ### For testing
