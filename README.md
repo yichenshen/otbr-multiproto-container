@@ -23,21 +23,6 @@ The same environment vars used for the [upstream](https://openthread.io/guides/b
 
 You'll need to configure IP forwarding and RA. Refer to the [OpenThread guide](https://openthread.io/guides/border-router/build-docker#enable-ip-forwarding). The script may need to be modified if your backbone interface isn't wlan0.
 
-#### Network Manager
-
-If interfaces are managed by network manager, the interface specific RA setting might not be applied at boot with sysctl. Instead add a dispatcher to Network Manager:
-
-`/etc/NetworkManager/dispatcher.d/99-accept-ra`
-
-```bash
-#!/bin/bash
-
-if [ "$1" = "eth0" ] && [ "$2" = "up" ]; then
-    echo 2 > /proc/sys/net/ipv6/conf/eth0/accept_ra
-    echo 64 > /proc/sys/net/ipv6/conf/eth0/accept_ra_rt_info_max_plen
-fi
-```
-
 ## Running
 
 ### For testing
@@ -67,15 +52,12 @@ sudo systemctl start otbr-multiproto
 
 ### Routing
 
-otbr by default creates routes with metric 256. This is somewhat awkward. It is higher then other advertised routes say from Google's Nest Hub (105), but lower than the systemd-networkd (1024). As such, it doesn't route Thread addresses to itself but instead routes `fe80::`. It's advisable to adjust the metric so routing behaves as expected.
+otbr by default creates routes with metric 256. It is higher then other advertised routes say from Google's Nest Hub (105). As such, it doesn't route Thread addresses to itself but instead routes it to an external border router. It's advisable to adjust the metric so routing behaves as expected.
 
 For example if your Thread IP prefix is `fdae:3c84:2ad6:1`:
 
 ```bash
-sudo ip -6 route del fdae:3c84:2ad6:1::/64 dev wpan0
-sudo ip -6 route replace fdae:3c84:2ad6:1::/64 dev wpan0 metric 64
-sudo ip -6 route del fe80::/64 dev wpan0
-sudo ip -6 route replace fe80::/64 dev wpan0 metric 2048
+sudo ip -6 route replace fdae:3c84:2ad6:1::/64 dev wpan0 metric 105 pref medium
 ```
 
 The quadlet container will do this after start automatically, though you'll need to change your Off-Mesh-Routable address (`fdae:3c84:2ad6:1`) to your own.

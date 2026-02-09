@@ -23,11 +23,7 @@ TimeoutStartSec=180
 RestartSec=30
 
 ExecStartPost=/usr/bin/sleep 20
-ExecStartPost=/usr/bin/ip -6 route del fdae:3c84:2ad6:1::/64 dev wpan0
-ExecStartPost=/usr/bin/ip -6 route replace fdae:3c84:2ad6:1::/64 dev wpan0 metric 64
-ExecStartPost=/usr/bin/ip -6 route del fe80::/64 dev wpan0
-ExecStartPost=/usr/bin/ip -6 route replace fe80::/64 dev wpan0 metric 2048
-
+ExecStartPost=/usr/bin/ip -6 route replace fdae:3c84:2ad6:1::/64 dev wpan0 metric 105
 
 [Install]
 WantedBy=default.target
