@@ -31,7 +31,7 @@ RUN apt-get install -y mdnsd
 
 # Download Silabs packages
 WORKDIR /tmp/silabs
-RUN wget https://github.com/SiliconLabs/simplicity_sdk/releases/latest/download/debian-bookworm.zip
+RUN wget https://github.com/SiliconLabsSoftware/sisdk-release/releases/download/v2025.12.0/debian-bookworm.zip
 RUN unzip debian-bookworm.zip -d multiprotocol-packages
 
 # Setup directories needed for ot-br setup
