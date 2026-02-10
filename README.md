@@ -35,7 +35,7 @@ sudo podman run --name=otbr -it --rm --privileged --network=host -v /run/dbus:/r
 
 > Also note that otbr requires a fair bit of privileges (rootful + network=host) because it needs to create and manage the Thread interface wpan0
 
-The rest API for otbr defaults to starting on 8081. You can use this elsewhere like Home Assistant to configure the border router.
+As of the 2025.12 Silabs SDK, Silab's OTBR no longer contains the REST API.
 
 ### Quadlet
 
@@ -114,11 +114,13 @@ sudo podman run --name=ot-ctl --rm -it --network=host -v otbr-run:/run:rw -v /et
 
 The first command runs the web GUI on port 8080. The second lands you in the OpenThread command line.
 
+> Note that because the REST API is not included, the topology view will not work.
+
 ## Creating/Joining Network
 
-If you are using Home Assistant, you can configure this by adding the border router using the `OpenThread Border Router` integration. Provide the REST API address mentioned above. This creates a new thread network if you didn't have one, or if you shared another border router's credentials to Home Assistant, it'll automatically join your new border router into the default network.
+You can join/create network using the web GUI, or with `ot-ctl`. Refer to the [OpenThread Guide](https://openthread.io/guides/border-router/form-network).
 
-You can also join/create network using the web GUI, or with `ot-ctl`. Refer to the [OpenThread Guide](https://openthread.io/guides/border-router/form-network).
+With Home Assistant, you want to look for the TLV dataset in `/config/.storage/thread.datasets` after sharing the auth credentials to Home Assistant. Use `ot-ctl` to set the dataset onto OTBR to have it join the network.
 
 ## License
 
